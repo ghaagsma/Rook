@@ -17,7 +17,7 @@ namespace Rook
         private float maxRunSpeed = 2.0f;
         private float maxJumpSpeed = 6.0f;
         private float runAcceleration = 0.4f;
-        private float jumpAcceleration = 6.0f;
+        private float jumpAcceleration = 7.0f;
 
         protected int level;        // current level
         protected int experience;   // total experience
@@ -71,10 +71,10 @@ namespace Rook
                 spriteAcceleration.X -= runAcceleration;
 
             // Jump
-            if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up) && canJump)
+            if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up) && !isAirborne)
             {
                 spriteAcceleration.Y -= jumpAcceleration;
-                canJump = false;
+                isAirborne = true;
             }
 
             // Show/Hide stats
@@ -113,24 +113,52 @@ namespace Rook
 
         private void AnimateHero(KeyboardState newState)
         {
-            if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 0)
-                animation.animateSprite = AnimationType.FaceLeft;
-            else if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 2)
-                animation.animateSprite = AnimationType.MoveLeft1;
-            else if (newState.IsKeyDown(Keys.Left))
-                animation.animateSprite = AnimationType.MoveLeft2;
-            else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 0)
-                animation.animateSprite = AnimationType.FaceRight;
-            else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 2)
-                animation.animateSprite = AnimationType.MoveRight1;
-            else if (newState.IsKeyDown(Keys.Right))
-                animation.animateSprite = AnimationType.MoveRight2;
-            else if (animation.animateSprite == AnimationType.MoveLeft1 ||
-                     animation.animateSprite == AnimationType.MoveLeft2)
-                animation.animateSprite = AnimationType.FaceLeft;
-            else if (animation.animateSprite == AnimationType.MoveRight1 ||
-                     animation.animateSprite == AnimationType.MoveRight2)
-                animation.animateSprite = AnimationType.FaceRight;
+            if (isAirborne)
+            {
+                if (spriteSpeed.X < -1)
+                    animation.animateSprite = AnimationType.MoveLeft1;
+                else if (spriteSpeed.X > 1)
+                    animation.animateSprite = AnimationType.MoveRight1;
+                else
+                {
+                    switch (animation.animateSprite)
+                    {
+                        case AnimationType.FaceLeft:
+                        case AnimationType.MoveLeft1:
+                        case AnimationType.MoveLeft2:
+                            animation.animateSprite = AnimationType.MoveLeft1;
+                            break;
+                        case AnimationType.FaceRight:
+                        case AnimationType.MoveRight1:
+                        case AnimationType.MoveRight2:
+                            animation.animateSprite = AnimationType.MoveRight1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 0)
+                    animation.animateSprite = AnimationType.FaceLeft;
+                else if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 2)
+                    animation.animateSprite = AnimationType.MoveLeft1;
+                else if (newState.IsKeyDown(Keys.Left))
+                    animation.animateSprite = AnimationType.MoveLeft2;
+                else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 0)
+                    animation.animateSprite = AnimationType.FaceRight;
+                else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 2)
+                    animation.animateSprite = AnimationType.MoveRight1;
+                else if (newState.IsKeyDown(Keys.Right))
+                    animation.animateSprite = AnimationType.MoveRight2;
+                else if (animation.animateSprite == AnimationType.MoveLeft1 ||
+                         animation.animateSprite == AnimationType.MoveLeft2)
+                    animation.animateSprite = AnimationType.FaceLeft;
+                else if (animation.animateSprite == AnimationType.MoveRight1 ||
+                        animation.animateSprite == AnimationType.MoveRight2)
+                    animation.animateSprite = AnimationType.FaceRight;
+            }
 
             animation.imageSource.X = (int)animation.animateSprite * animation.imageSource.Width;
             animation.animationValue++;

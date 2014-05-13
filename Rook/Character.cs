@@ -15,7 +15,7 @@ namespace Rook
     {
         public Character()
         {
-            canJump = true;
+            isAirborne = false;
 
             maxHealth = 200;
             maxMana = 100;
@@ -29,7 +29,7 @@ namespace Rook
             int xTile1, xTile2, yTile1, yTile2;
 
             // Move Horizontally
-            for (int i = 0; i < Math.Abs(spriteSpeed.X); i++)
+            for (int i = 0; i < (int)Math.Abs(spriteSpeed.X); i++)
             {
                 spritePosition.X += (int)(spriteSpeed.X / Math.Abs(spriteSpeed.X));
 
@@ -51,7 +51,7 @@ namespace Rook
             }
 
             // Move Vertically
-            for (int i = 0; i < Math.Abs(spriteSpeed.Y); i++)
+            for (int i = 0; i < (int)Math.Abs(spriteSpeed.Y); i++)
             {
                 spritePosition.Y += (int)(spriteSpeed.Y / Math.Abs(spriteSpeed.Y));
 
@@ -67,7 +67,10 @@ namespace Rook
                     map[yTile1, xTile2].collisionType == CollisionType.Full ||
                     map[yTile2, xTile2].collisionType == CollisionType.Full)
                 {
-                    canJump = spriteSpeed.Y > 0;   // If character was falling down, they just landed. Enable jumping.
+                    // If character was moving upward, they are still airborne.
+                    // Otherwise, they just landed.
+                    isAirborne = spriteSpeed.Y <= 0;
+
                     spritePosition.Y -= (int)(spriteSpeed.Y / Math.Abs(spriteSpeed.Y));
                     spriteSpeed.Y = 0;
                 }
@@ -75,7 +78,7 @@ namespace Rook
 
             // Allow character to jump for a slight instant after falling off an edge
             if (spriteSpeed.Y > 2)
-                canJump = false;
+                isAirborne = true;
 
             // Check for map collision damage
             xTile1 = (spritePosition.X + 1) / ApplicationGlobals.TILE_SIZE;
@@ -97,7 +100,7 @@ namespace Rook
 
         virtual public void kill() { }
 
-        protected bool canJump;
+        protected bool isAirborne;
 
         protected float terminalVelocity = 11.0f;
         protected float gravity = 0.4f;
