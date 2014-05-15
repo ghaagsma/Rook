@@ -42,8 +42,8 @@ namespace Rook
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Map.load(Content, "map1.txt");
-            Hero.load(Content);
+            Map.Load(Content, "map1.txt");
+            Hero.Load(Content);
         }
 
         protected override void UnloadContent()
@@ -69,8 +69,8 @@ namespace Rook
             GraphicsDevice.Clear(Color.SkyBlue);
 
             spriteBatch.Begin();
-            Map.printMap(spriteBatch);
-            Hero.draw(spriteBatch);
+            Map.Draw(spriteBatch);
+            Hero.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

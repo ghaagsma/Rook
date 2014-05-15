@@ -24,6 +24,6 @@ namespace Rook
             friendlyFire = friendly;
         }
 
-        public override void load(ContentManager Content){}
+        public override void Load(ContentManager Content){}
     }
 }

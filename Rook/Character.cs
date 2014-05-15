@@ -23,9 +23,8 @@ namespace Rook
             mana = 100;
         }
 
-        protected void UpdateLocation(MapTile[,] map, GameTime gameTime)
+        protected void Move(MapTile[,] map, GameTime gameTime)
         {
-            // TODO: Make invulnerable for short time after taking damage
             int xTile1, xTile2, yTile1, yTile2;
 
             // Move Horizontally
@@ -91,14 +90,27 @@ namespace Rook
                 map[yTile1, xTile2].collisionType == CollisionType.Damage ||
                 map[yTile2, xTile2].collisionType == CollisionType.Damage)
             {
-                health -= 1;
-
-                if (health <= 0)
-                    kill();
+                TakeDamage(1);
             }
+        }// Move
+
+        virtual public void TakeDamage(int damage)
+        {
+            health -= damage;
+
+            if (health <= 0)
+                Kill();
+            // TODO: Make invulnerable for short time after taking damage
+            //else
+            //{
+
+            //}
         }
 
-        virtual public void kill() { }
+        virtual public void Kill()
+        { 
+            
+        }
 
         protected bool isAirborne;
 

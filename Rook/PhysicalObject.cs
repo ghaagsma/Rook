@@ -15,7 +15,7 @@ namespace Rook
     {
         public PhysicalObject()
         {
-            animation = new AnimationData();
+            //animation = new Animation();
             exists = true;
 
             spritePosition = new Rectangle(16, 20, ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
@@ -23,11 +23,11 @@ namespace Rook
             spriteAcceleration = new Vector2(0.0f, 0.0f);
         } // ctor
 
-        public virtual void load(ContentManager Content) { }
+        public virtual void Load(ContentManager Content) { }
 
         public virtual void Update(GameTime gameTime, MapTile[,] map) { }
 
-        public virtual void draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if(exists)
                 spriteBatch.Draw(pTexture, spritePosition, animation.imageSource, Color.White);
@@ -40,6 +40,6 @@ namespace Rook
         protected Vector2 spriteSpeed;          // Velocity
         protected Vector2 spriteAcceleration;   // Acceleration
 
-        protected AnimationData animation;      // Animation data
+        protected Animation animation;      // Animation data
     }
 }

@@ -9,25 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
 namespace Rook
 {
     public class Hero : Character
     {
-        private float maxRunSpeed = 2.0f;
-        private float maxJumpSpeed = 6.0f;
-        private float runAcceleration = 0.4f;
-        private float jumpAcceleration = 7.0f;
-
-        protected int level;        // current level
-        protected int experience;   // total experience
-        protected int nextLevel;    // experience needed to level up
-
-        protected bool showStats;   // whether or not to draw stat bar
-
-        protected KeyboardState oldState;
-        protected KeyboardState newState;
-
         public Hero()
         {
             oldState = Keyboard.GetState();
@@ -39,10 +24,10 @@ namespace Rook
 
             spritePosition = new Rectangle(ApplicationGlobals.TILE_SIZE, 43 * ApplicationGlobals.TILE_SIZE, 
                 ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
-            animation.imageSource = new Rectangle(0, 0, ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
+            animation = new Animation(1);
         } // ctor
 
-        public override void load(ContentManager Content)
+        public override void Load(ContentManager Content)
         {
             pTexture = Content.Load<Texture2D>("monk");
         } // load
@@ -97,8 +82,8 @@ namespace Rook
             float xSpeedInt = spriteSpeed.X;
             float ySpeedInt = spriteSpeed.Y;
 
-            UpdateLocation(map, gameTime);
-            AnimateHero(newState);
+            Move(map, gameTime);
+            animation.UpdateAnimationImage(spriteSpeed, isAirborne);
 
             // TODO: move this logic to relevant area
             if (experience >= nextLevel)
@@ -106,80 +91,21 @@ namespace Rook
                 level++;
                 experience -= nextLevel;
                 nextLevel = 100 + 10*level;
+
+                // TODO: add leveling benefits
             }
 
             oldState = newState;
         } // updateInput
 
-        private void AnimateHero(KeyboardState newState)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (isAirborne)
-            {
-                if (spriteSpeed.X < -1)
-                    animation.animateSprite = AnimationType.MoveLeft1;
-                else if (spriteSpeed.X > 1)
-                    animation.animateSprite = AnimationType.MoveRight1;
-                else
-                {
-                    switch (animation.animateSprite)
-                    {
-                        case AnimationType.FaceLeft:
-                        case AnimationType.MoveLeft1:
-                        case AnimationType.MoveLeft2:
-                            animation.animateSprite = AnimationType.MoveLeft1;
-                            break;
-                        case AnimationType.FaceRight:
-                        case AnimationType.MoveRight1:
-                        case AnimationType.MoveRight2:
-                            animation.animateSprite = AnimationType.MoveRight1;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 0)
-                    animation.animateSprite = AnimationType.FaceLeft;
-                else if (newState.IsKeyDown(Keys.Left) && animation.animationSwitch == 2)
-                    animation.animateSprite = AnimationType.MoveLeft1;
-                else if (newState.IsKeyDown(Keys.Left))
-                    animation.animateSprite = AnimationType.MoveLeft2;
-                else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 0)
-                    animation.animateSprite = AnimationType.FaceRight;
-                else if (newState.IsKeyDown(Keys.Right) && animation.animationSwitch == 2)
-                    animation.animateSprite = AnimationType.MoveRight1;
-                else if (newState.IsKeyDown(Keys.Right))
-                    animation.animateSprite = AnimationType.MoveRight2;
-                else if (animation.animateSprite == AnimationType.MoveLeft1 ||
-                         animation.animateSprite == AnimationType.MoveLeft2)
-                    animation.animateSprite = AnimationType.FaceLeft;
-                else if (animation.animateSprite == AnimationType.MoveRight1 ||
-                        animation.animateSprite == AnimationType.MoveRight2)
-                    animation.animateSprite = AnimationType.FaceRight;
-            }
-
-            animation.imageSource.X = (int)animation.animateSprite * animation.imageSource.Width;
-            animation.animationValue++;
-
-            if (animation.animationValue > animation.animationThreshold)
-            {
-                animation.animationSwitch++;
-                if (animation.animationSwitch > 3)
-                    animation.animationSwitch = 0;
-                animation.animationValue = 0;
-            }
-        }
-
-        public override void draw(SpriteBatch spriteBatch)
-        {
-            base.draw(spriteBatch);
-            drawStats(spriteBatch);
+            base.Draw(spriteBatch);
+            DrawStats(spriteBatch);
         }
 
         // Here lie extremely fragile constants. Sorry.
-        private void drawStats(SpriteBatch spriteBatch)
+        private void DrawStats(SpriteBatch spriteBatch)
         {
             if (!showStats)
                 return;
@@ -188,8 +114,8 @@ namespace Rook
             Rectangle source, destination;
             source.Height = destination.Height = 2 * ApplicationGlobals.TILE_SIZE;
             source.Width = destination.Width = 4 * ApplicationGlobals.TILE_SIZE;
-            source.X = 7 * ApplicationGlobals.TILE_SIZE;
-            source.Y = 0;
+            source.X = 0;
+            source.Y = 3 * ApplicationGlobals.TILE_SIZE;
 
             destination.X = spritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2;
             destination.Y = spritePosition.Y - 3*ApplicationGlobals.TILE_SIZE;
@@ -199,8 +125,8 @@ namespace Rook
             // Draw Health
             source.Height = 1;
             source.Width = 14;
-            source.X = 7 * ApplicationGlobals.TILE_SIZE;
-            source.Y = 2 * ApplicationGlobals.TILE_SIZE;
+            source.X = 0;
+            source.Y = 5 * ApplicationGlobals.TILE_SIZE;
 
             destination.Height = 1;
             destination.Width = 14;
@@ -241,23 +167,32 @@ namespace Rook
             }
         } // drawStats
 
-        public void animateDamage()
+        public void AnimateDeath()
         {
 
-        } // animateDamage
+        } // AnimateDeath
 
-        public void animateDeath()
+        public override void Kill()
         {
-
-        } // animateDeath
-
-        public override void kill()
-        {
-            animateDeath();
+            AnimateDeath();
 
             exists = false;
             spritePosition.X = 0;
             spritePosition.Y = 0;
-        } // kill
+        } // Kill
+
+        private float maxRunSpeed = 2.0f;
+        private float maxJumpSpeed = 6.0f;
+        private float runAcceleration = 0.4f;
+        private float jumpAcceleration = 7.0f;
+
+        protected int level;        // current level
+        protected int experience;   // total experience
+        protected int nextLevel;    // experience needed to level up
+
+        protected bool showStats;   // whether or not to draw stat bar
+
+        protected KeyboardState oldState;
+        protected KeyboardState newState;
     }
 }

@@ -38,7 +38,7 @@ namespace Rook
             }
         }
 
-        public void printMap(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < ApplicationGlobals.MAP_HEIGHT / ApplicationGlobals.TILE_SIZE; i++)
             {
@@ -49,7 +49,7 @@ namespace Rook
             }
         }
 
-        public void load(ContentManager Content, string file)
+        public void Load(ContentManager Content, string file)
         {
             mapTexture0 = Content.Load<Texture2D>("mapTiles");
 
