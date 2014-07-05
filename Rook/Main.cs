@@ -16,8 +16,8 @@ namespace Rook
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public Map Map;
-        public Hero Hero;
+        private Map _map;
+        private List<PhysicalObject> _objects;
 
         public Main()
         {
@@ -28,8 +28,9 @@ namespace Rook
             this.graphics.PreferredBackBufferHeight = ApplicationGlobals.MAP_HEIGHT;
             this.graphics.IsFullScreen = false;
 
-            Map = new Map();
-            Hero = new Hero();
+            _map = new Map();
+            _objects = new List<PhysicalObject>();
+            _objects.Add(new Hero(32, 32));
         }
 
         protected override void Initialize()
@@ -42,8 +43,11 @@ namespace Rook
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Map.Load(Content, "map1.txt");
-            Hero.Load(Content);
+            _map.Load(Content, "map1.txt");
+            foreach (var o in _objects)
+            {
+                o.Load(Content);
+            }
         }
 
         protected override void UnloadContent()
@@ -57,9 +61,10 @@ namespace Rook
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            Hero.Update(gameTime, Map.gMap);
-
-            // TODO: Update other map objects/characters
+            foreach (var o in _objects)
+            {
+                o.Update(gameTime, _map.gMap);
+            }
 
             base.Update(gameTime);
         }
@@ -69,8 +74,11 @@ namespace Rook
             GraphicsDevice.Clear(Color.SkyBlue);
 
             spriteBatch.Begin();
-            Map.Draw(spriteBatch);
-            Hero.Draw(spriteBatch);
+            _map.Draw(spriteBatch);
+            foreach (var o in _objects)
+            {
+                o.Draw(spriteBatch);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

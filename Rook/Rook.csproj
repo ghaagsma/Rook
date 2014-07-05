@@ -113,7 +113,7 @@
     <Compile Include="GameModel.cs" />
     <Compile Include="Minion.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="MagicAttack.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="Hero.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Main.cs" />

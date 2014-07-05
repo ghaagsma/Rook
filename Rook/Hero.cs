@@ -13,7 +13,8 @@ namespace Rook
 {
     public class Hero : Character
     {
-        public Hero()
+        public Hero(int startX = ApplicationGlobals.TILE_SIZE, 
+                    int startY = 43 * ApplicationGlobals.TILE_SIZE)
         {
             oldState = Keyboard.GetState();
 
@@ -22,9 +23,9 @@ namespace Rook
             nextLevel = 100 + 10*level;
             showStats = true;
 
-            spritePosition = new Rectangle(ApplicationGlobals.TILE_SIZE, 43 * ApplicationGlobals.TILE_SIZE, 
+            spritePosition = new Rectangle(startX, startY, 
                 ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
-            animation = new Animation(1);
+            animation = new Animation(0);
         } // ctor
 
         public override void Load(ContentManager Content)

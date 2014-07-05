@@ -60,7 +60,7 @@ namespace Rook
 
             while ((mapLine = mapFile.ReadLine()) != null)
             {
-                string[] mapElt = mapLine.Split(',');
+                string[] mapElt = mapLine.Split(' ');
 
                 for (w = 0; w < ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE; w++)
                 {

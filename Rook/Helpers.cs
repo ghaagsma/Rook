@@ -27,4 +27,12 @@ namespace Rook
         Bottom,
         Damage,
     };
+
+    // TODO: THIS IS WHERE I LEFT OFF...
+    public enum Owner
+    {
+        Player,
+        Neutral,
+        Enemy
+    };
 }

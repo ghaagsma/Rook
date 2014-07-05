@@ -11,17 +11,19 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Rook
 {
-    class MagicAttack : PhysicalObject
+    class Projectile : PhysicalObject
     {
-        protected int damage;
-        protected bool friendlyFire;
+        protected int _damage;
+        protected int _owner;
+        protected int _range;
 
-        public MagicAttack(int attackDamage, Rectangle position, Vector2 velocity, bool friendly)
+        public Projectile(int damage, int owner, int range, Rectangle position, Vector2 velocity)
         {
-            damage = attackDamage;
+            _damage = damage;
+            _owner = owner;
+            _range = range;
             spritePosition = position;
             spriteSpeed = velocity;
-            friendlyFire = friendly;
         }
 
         public override void Load(ContentManager Content){}
