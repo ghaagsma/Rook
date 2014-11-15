@@ -13,7 +13,7 @@ namespace Rook
             OldState = Keyboard.GetState();
 
             Level = 1;
-            Experience = 0;
+            Experience = LastLevel = 0;
             NextLevel = 100 + 10*Level;
             ShowStats = true;
 
@@ -34,55 +34,21 @@ namespace Rook
 
             NewState = Keyboard.GetState();
 
-            SpriteAcceleration.Y = 0;
-            SpriteAcceleration.X = 0;
-
-            SpriteAcceleration.Y += Gravity;
-
-            // Horizontal acceleration
-            if (NewState.IsKeyDown(Keys.Left))
-                SpriteAcceleration.X -= RunAcceleration;
-            else if (SpriteSpeed.X < 0)
-                SpriteAcceleration.X += RunAcceleration;
-
-            if (NewState.IsKeyDown(Keys.Right) && !NewState.IsKeyDown(Keys.Left))
-                SpriteAcceleration.X += RunAcceleration;
-            else if (SpriteSpeed.X > 0)
-                SpriteAcceleration.X -= RunAcceleration;
-
-            // Jump
-            if (NewState.IsKeyDown(Keys.Up) && !OldState.IsKeyDown(Keys.Up) && !IsAirborne)
-            {
-                SpriteAcceleration.Y -= JumpAcceleration;
-                IsAirborne = true;
-            }
-
             // Show/Hide stats
             if (NewState.IsKeyDown(Keys.S) && !OldState.IsKeyDown(Keys.S))
                 ShowStats = !ShowStats;
 
-            SpriteSpeed.X += SpriteAcceleration.X;
-            SpriteSpeed.Y += SpriteAcceleration.Y;
-
-            if (SpriteSpeed.X > MaxRunSpeed)
-                SpriteSpeed.X = MaxRunSpeed;
-            else if (SpriteSpeed.X < -1.0f*MaxRunSpeed)
-                SpriteSpeed.X = -1.0f*MaxRunSpeed;
-
-            if (SpriteSpeed.Y > TerminalVelocity)
-                SpriteSpeed.Y = TerminalVelocity;
-            else if (SpriteSpeed.Y < -1.0f*MaxJumpSpeed)
-                SpriteSpeed.Y = -1.0f*MaxJumpSpeed;
-
-            Move(map, gameTime);
+            UpdateAcceleration();
+            UpdateVelocity();
             Animation.UpdateAnimationImage(SpriteSpeed, IsAirborne);
+            Move(map, gameTime);
 
             // TODO: move this logic to relevant area
             if (Experience >= NextLevel)
             {
                 Level++;
-                Experience -= NextLevel;
-                NextLevel = 100 + 10*Level;
+                LastLevel = NextLevel;
+                NextLevel += 100 + 10*Level;
 
                 // TODO: add leveling benefits
             }
@@ -103,6 +69,47 @@ namespace Rook
             Exists = false;
             SpritePosition.X = -1000;
             SpritePosition.Y = -1000;
+        }
+
+        private void UpdateAcceleration()
+        {
+            SpriteAcceleration.X = 0;
+            SpriteAcceleration.Y = 0;
+            SpriteAcceleration.Y += Gravity;
+
+            // Horizontal acceleration
+            if (NewState.IsKeyDown(Keys.Left))
+                SpriteAcceleration.X -= RunAcceleration;
+            else if (SpriteSpeed.X < 0)
+                SpriteAcceleration.X += RunAcceleration;
+
+            if (NewState.IsKeyDown(Keys.Right) && !NewState.IsKeyDown(Keys.Left))
+                SpriteAcceleration.X += RunAcceleration;
+            else if (SpriteSpeed.X > 0)
+                SpriteAcceleration.X -= RunAcceleration;
+
+            // Jump
+            if (NewState.IsKeyDown(Keys.Up) && !OldState.IsKeyDown(Keys.Up) && !IsAirborne)
+            {
+                SpriteAcceleration.Y -= JumpAcceleration;
+                IsAirborne = true;
+            }
+        }
+
+        private void UpdateVelocity()
+        {
+            SpriteSpeed.X += SpriteAcceleration.X;
+            SpriteSpeed.Y += SpriteAcceleration.Y;
+
+            if (SpriteSpeed.X > MaxRunSpeed)
+                SpriteSpeed.X = MaxRunSpeed;
+            else if (SpriteSpeed.X < -1.0f * MaxRunSpeed)
+                SpriteSpeed.X = -1.0f * MaxRunSpeed;
+
+            if (SpriteSpeed.Y > TerminalVelocity)
+                SpriteSpeed.Y = TerminalVelocity;
+            else if (SpriteSpeed.Y < -1.0f * MaxJumpSpeed)
+                SpriteSpeed.Y = -1.0f * MaxJumpSpeed;
         }
 
         // Here lie extremely fragile constants. Sorry.
@@ -159,7 +166,7 @@ namespace Rook
             source.Height = destination.Height = 4;
             destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TileSize + 14;
 
-            var numCols = (Experience*28) / NextLevel;
+            var numCols = ((Experience - LastLevel)*28) / (NextLevel - LastLevel);
 
             for (var curCol = 0; curCol < numCols; curCol++)
             {
@@ -180,6 +187,7 @@ namespace Rook
 
         protected int Level;        // current level
         protected int Experience;   // total experience
+        protected int LastLevel;    // experience needed to gain current level
         protected int NextLevel;    // experience needed to level up
 
         protected bool ShowStats;   // whether or not to draw stat bar
