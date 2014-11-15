@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+﻿using Microsoft.Xna.Framework;
 
 namespace Rook
 {
     public struct MapTile
     {
-        public CollisionType collisionType;
-        public Rectangle mapSrc;
-        public Rectangle mapDest;
-        public char displayChar;
+        public CollisionType CollisionType;
+        public Rectangle MapSrc;
+        public Rectangle MapDest;
+        public char DisplayChar;
     };
 
     public enum CollisionType
@@ -28,7 +19,7 @@ namespace Rook
         Damage,
     };
 
-    // TODO: THIS IS WHERE I LEFT OFF...
+    // TODO: Implement this
     public enum Owner
     {
         Player,

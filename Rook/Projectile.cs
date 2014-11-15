@@ -1,31 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace Rook
 {
     class Projectile : PhysicalObject
     {
-        protected int _damage;
-        protected int _owner;
-        protected int _range;
+        protected int Damage;
+        protected int Owner;
+        protected int Range;
 
         public Projectile(int damage, int owner, int range, Rectangle position, Vector2 velocity)
         {
-            _damage = damage;
-            _owner = owner;
-            _range = range;
-            spritePosition = position;
-            spriteSpeed = velocity;
+            Damage = damage;
+            Owner = owner;
+            Range = range;
+            SpritePosition = position;
+            SpriteSpeed = velocity;
         }
 
-        public override void Load(ContentManager Content){}
+        public override void Load(ContentManager content) {}
     }
 }

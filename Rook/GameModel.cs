@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Rook
+﻿namespace Rook
 {
     public class GameModel
     {
-        private static GameModel model;
+        private static GameModel _model;
 
         private GameModel() { }
 
         public static GameModel Model
         {
-            get 
-            {
-                if (model == null)
-                    model = new GameModel();
-
-                return model;
-            }
+            get { return _model ?? (_model = new GameModel()); }
         }
     }
 }

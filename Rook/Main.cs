@@ -1,47 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+using System.Collections.Generic;
 
 namespace Rook
 {
-    public class Main : Microsoft.Xna.Framework.Game
+    public class Main : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        SpriteBatch _spriteBatch;
 
-        private Map _map;
+        private readonly Map _map;
         private List<PhysicalObject> _objects;
 
         public Main()
         {
-            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            this.graphics.PreferredBackBufferWidth = ApplicationGlobals.MAP_WIDTH;
-            this.graphics.PreferredBackBufferHeight = ApplicationGlobals.MAP_HEIGHT;
-            this.graphics.IsFullScreen = false;
-
             _map = new Map();
-            _objects = new List<PhysicalObject>();
-            _objects.Add(new Hero(32, 32));
+            _objects = new List<PhysicalObject> { new Hero() };
+
+            new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = ApplicationGlobals.MAP_WIDTH,
+                PreferredBackBufferHeight = ApplicationGlobals.MAP_HEIGHT,
+                IsFullScreen = false
+            };
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
+        // Unused
+        //protected override void Initialize()
+        //{
+        //    base.Initialize();
+        //}
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Create a new SpriteBatch, which can be used to draw textures
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _map.Load(Content, "map1.txt");
             foreach (var o in _objects)
@@ -52,18 +46,18 @@ namespace Rook
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            // TODO: Unload any non-ContentManager content here
         }
 
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
+                Exit();
 
             foreach (var o in _objects)
             {
-                o.Update(gameTime, _map.gMap);
+                o.Update(gameTime, _map.GMap);
             }
 
             base.Update(gameTime);
@@ -73,13 +67,13 @@ namespace Rook
         {
             GraphicsDevice.Clear(Color.SkyBlue);
 
-            spriteBatch.Begin();
-            _map.Draw(spriteBatch);
+            _spriteBatch.Begin();
+            _map.Draw(_spriteBatch);
             foreach (var o in _objects)
             {
-                o.Draw(spriteBatch);
+                o.Draw(_spriteBatch);
             }
-            spriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

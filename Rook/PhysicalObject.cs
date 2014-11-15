@@ -1,45 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace Rook
 {
     public abstract class PhysicalObject
     {
-        public PhysicalObject()
+        protected PhysicalObject()
         {
-            //animation = new Animation();
-            exists = true;
+            //Animation = new Animation();
+            Exists = true;
 
-            spritePosition = new Rectangle(16, 20, ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
-            spriteSpeed = new Vector2(0.0f, 0.0f);
-            spriteAcceleration = new Vector2(0.0f, 0.0f);
+            SpritePosition = new Rectangle(16, 20, ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
+            SpriteSpeed = new Vector2(0.0f, 0.0f);
+            SpriteAcceleration = new Vector2(0.0f, 0.0f);
         } // ctor
 
-        public virtual void Load(ContentManager Content) { }
+        public virtual void Load(ContentManager content) { }
 
         public virtual void Update(GameTime gameTime, MapTile[,] map) { }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if(exists)
-                spriteBatch.Draw(pTexture, spritePosition, animation.imageSource, Color.White);
+            if(Exists)
+                spriteBatch.Draw(PTexture, SpritePosition, Animation.ImageSource, Color.White);
         } // draw
 
-        protected bool exists;                  // Whether the object exists and should be displayed/updated
+        protected bool Exists;                  // Whether the object exists and should be displayed/updated
 
-        protected Texture2D pTexture;           // Image to draw
-        protected Rectangle spritePosition;     // Position
-        protected Vector2 spriteSpeed;          // Velocity
-        protected Vector2 spriteAcceleration;   // Acceleration
+        protected Texture2D PTexture;           // Image to draw
+        protected Rectangle SpritePosition;     // Position
+        protected Vector2 SpriteSpeed;          // Velocity
+        protected Vector2 SpriteAcceleration;   // Acceleration
 
-        protected Animation animation;      // Animation data
+        protected Animation Animation;          // Animation data
     }
 }

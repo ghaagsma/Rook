@@ -1,103 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace Rook
 {
     public class Hero : Character
     {
         public Hero(int startX = ApplicationGlobals.TILE_SIZE, 
-                    int startY = 43 * ApplicationGlobals.TILE_SIZE)
+                    int startY = 43*ApplicationGlobals.TILE_SIZE)
         {
-            oldState = Keyboard.GetState();
+            OldState = Keyboard.GetState();
 
-            level = 1;
-            experience = 0;
-            nextLevel = 100 + 10*level;
-            showStats = true;
+            Level = 1;
+            Experience = 0;
+            NextLevel = 100 + 10*Level;
+            ShowStats = true;
 
-            spritePosition = new Rectangle(startX, startY, 
+            SpritePosition = new Rectangle(startX, startY, 
                 ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
-            animation = new Animation(0);
-        } // ctor
+            Animation = new Animation(0);
+        }
 
-        public override void Load(ContentManager Content)
+        public override void Load(ContentManager content)
         {
-            pTexture = Content.Load<Texture2D>("monk");
-        } // load
+            PTexture = content.Load<Texture2D>("monk");
+        }
 
         public override void Update(GameTime gameTime, MapTile[,] map)
         {
-            if (!exists)
+            if (!Exists)
                 return;
 
-            newState = Keyboard.GetState();
+            NewState = Keyboard.GetState();
 
-            spriteAcceleration.Y = 0;
-            spriteAcceleration.X = 0;
+            SpriteAcceleration.Y = 0;
+            SpriteAcceleration.X = 0;
 
-            spriteAcceleration.Y += gravity;
+            SpriteAcceleration.Y += Gravity;
 
             // Horizontal acceleration
-            if (newState.IsKeyDown(Keys.Left))
-                spriteAcceleration.X -= runAcceleration;
-            else if (spriteSpeed.X < 0)
-                spriteAcceleration.X += runAcceleration;
+            if (NewState.IsKeyDown(Keys.Left))
+                SpriteAcceleration.X -= RunAcceleration;
+            else if (SpriteSpeed.X < 0)
+                SpriteAcceleration.X += RunAcceleration;
 
-            if (newState.IsKeyDown(Keys.Right) && !newState.IsKeyDown(Keys.Left))
-                spriteAcceleration.X += runAcceleration;
-            else if (spriteSpeed.X > 0)
-                spriteAcceleration.X -= runAcceleration;
+            if (NewState.IsKeyDown(Keys.Right) && !NewState.IsKeyDown(Keys.Left))
+                SpriteAcceleration.X += RunAcceleration;
+            else if (SpriteSpeed.X > 0)
+                SpriteAcceleration.X -= RunAcceleration;
 
             // Jump
-            if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up) && !isAirborne)
+            if (NewState.IsKeyDown(Keys.Up) && !OldState.IsKeyDown(Keys.Up) && !IsAirborne)
             {
-                spriteAcceleration.Y -= jumpAcceleration;
-                isAirborne = true;
+                SpriteAcceleration.Y -= JumpAcceleration;
+                IsAirborne = true;
             }
 
             // Show/Hide stats
-            if (newState.IsKeyDown(Keys.S) && !oldState.IsKeyDown(Keys.S))
-                showStats = !showStats;
+            if (NewState.IsKeyDown(Keys.S) && !OldState.IsKeyDown(Keys.S))
+                ShowStats = !ShowStats;
 
-            spriteSpeed.X += spriteAcceleration.X;
-            spriteSpeed.Y += spriteAcceleration.Y;
+            SpriteSpeed.X += SpriteAcceleration.X;
+            SpriteSpeed.Y += SpriteAcceleration.Y;
 
-            if (spriteSpeed.X > maxRunSpeed)
-                spriteSpeed.X = maxRunSpeed;
-            else if (spriteSpeed.X < -1.0f * maxRunSpeed)
-                spriteSpeed.X = -1.0f * maxRunSpeed;
+            if (SpriteSpeed.X > MaxRunSpeed)
+                SpriteSpeed.X = MaxRunSpeed;
+            else if (SpriteSpeed.X < -1.0f * MaxRunSpeed)
+                SpriteSpeed.X = -1.0f * MaxRunSpeed;
 
-            if (spriteSpeed.Y > terminalVelocity)
-                spriteSpeed.Y = terminalVelocity;
-            else if (spriteSpeed.Y < -1.0f * maxJumpSpeed)
-                spriteSpeed.Y = -1.0f * maxJumpSpeed;
-
-            float xSpeedInt = spriteSpeed.X;
-            float ySpeedInt = spriteSpeed.Y;
+            if (SpriteSpeed.Y > TerminalVelocity)
+                SpriteSpeed.Y = TerminalVelocity;
+            else if (SpriteSpeed.Y < -1.0f * MaxJumpSpeed)
+                SpriteSpeed.Y = -1.0f * MaxJumpSpeed;
 
             Move(map, gameTime);
-            animation.UpdateAnimationImage(spriteSpeed, isAirborne);
+            Animation.UpdateAnimationImage(SpriteSpeed, IsAirborne);
 
             // TODO: move this logic to relevant area
-            if (experience >= nextLevel)
+            if (Experience >= NextLevel)
             {
-                level++;
-                experience -= nextLevel;
-                nextLevel = 100 + 10*level;
+                Level++;
+                Experience -= NextLevel;
+                NextLevel = 100 + 10*Level;
 
                 // TODO: add leveling benefits
             }
 
-            oldState = newState;
-        } // updateInput
+            OldState = NewState;
+        }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -105,23 +96,32 @@ namespace Rook
             DrawStats(spriteBatch);
         }
 
+        public override void Kill()
+        {
+            AnimateDeath();
+
+            Exists = false;
+            SpritePosition.X = -1000;
+            SpritePosition.Y = -1000;
+        }
+
         // Here lie extremely fragile constants. Sorry.
         private void DrawStats(SpriteBatch spriteBatch)
         {
-            if (!showStats)
+            if (!ShowStats)
                 return;
 
             // Draw Health/Mana/Exp. Outline
             Rectangle source, destination;
-            source.Height = destination.Height = 2 * ApplicationGlobals.TILE_SIZE;
-            source.Width = destination.Width = 4 * ApplicationGlobals.TILE_SIZE;
+            source.Height = destination.Height = 2*ApplicationGlobals.TILE_SIZE;
+            source.Width = destination.Width = 4*ApplicationGlobals.TILE_SIZE;
             source.X = 0;
-            source.Y = 3 * ApplicationGlobals.TILE_SIZE;
+            source.Y = 3*ApplicationGlobals.TILE_SIZE;
 
-            destination.X = spritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2;
-            destination.Y = spritePosition.Y - 3*ApplicationGlobals.TILE_SIZE;
+            destination.X = SpritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2;
+            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE;
 
-            spriteBatch.Draw(pTexture, destination, source, Color.White);
+            spriteBatch.Draw(PTexture, destination, source, Color.White);
 
             // Draw Health
             source.Height = 1;
@@ -131,69 +131,60 @@ namespace Rook
 
             destination.Height = 1;
             destination.Width = 14;
-            destination.X = spritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2 + 2;
+            destination.X = SpritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2 + 2;
 
-            int numRows = (health * 28) / maxHealth;
+            var numRows = (Health * 28) / MaxHealth;
 
-            for (int curRow = numRows; curRow > 0; curRow--)
+            for (var curRow = numRows; curRow > 0; curRow--)
             {
-                destination.Y = spritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
-                spriteBatch.Draw(pTexture, destination, source, Color.White);
+                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
+                spriteBatch.Draw(PTexture, destination, source, Color.White);
             }
             
             // Draw Mana
             source.Y++;
             destination.X += 46;
 
-            numRows = (mana * 28) / maxMana;
+            numRows = (Mana*28) / MaxMana;
 
-            for (int curRow = numRows; curRow > 0; curRow--)
+            for (var curRow = numRows; curRow > 0; curRow--)
             {
-                destination.Y = spritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
-                spriteBatch.Draw(pTexture, destination, source, Color.White);
+                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
+                spriteBatch.Draw(PTexture, destination, source, Color.White);
             }
 
             // Draw Exp.
             source.Y++;
             source.Width = destination.Width = 1;
             source.Height = destination.Height = 4;
-            destination.Y = spritePosition.Y - 3*ApplicationGlobals.TILE_SIZE + 14;
+            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE + 14;
 
-            int numCols = (experience * 28) / nextLevel;
+            var numCols = (Experience * 28) / NextLevel;
 
-            for (int curCol = 0; curCol < numCols; curCol++)
+            for (var curCol = 0; curCol < numCols; curCol++)
             {
-                destination.X = spritePosition.X - 6 + curCol;
-                spriteBatch.Draw(pTexture, destination, source, Color.White);
+                destination.X = SpritePosition.X - 6 + curCol;
+                spriteBatch.Draw(PTexture, destination, source, Color.White);
             }
-        } // drawStats
+        }
 
-        public void AnimateDeath()
+        private static void AnimateDeath()
         {
 
-        } // AnimateDeath
+        }
 
-        public override void Kill()
-        {
-            AnimateDeath();
+        private const float MaxRunSpeed = 2.0f;
+        private const float MaxJumpSpeed = 6.0f;
+        private const float RunAcceleration = 0.4f;
+        private const float JumpAcceleration = 7.0f;
 
-            exists = false;
-            spritePosition.X = 0;
-            spritePosition.Y = 0;
-        } // Kill
+        protected int Level;        // current level
+        protected int Experience;   // total experience
+        protected int NextLevel;    // experience needed to level up
 
-        private float maxRunSpeed = 2.0f;
-        private float maxJumpSpeed = 6.0f;
-        private float runAcceleration = 0.4f;
-        private float jumpAcceleration = 7.0f;
+        protected bool ShowStats;   // whether or not to draw stat bar
 
-        protected int level;        // current level
-        protected int experience;   // total experience
-        protected int nextLevel;    // experience needed to level up
-
-        protected bool showStats;   // whether or not to draw stat bar
-
-        protected KeyboardState oldState;
-        protected KeyboardState newState;
+        protected KeyboardState OldState;
+        protected KeyboardState NewState;
     }
 }
