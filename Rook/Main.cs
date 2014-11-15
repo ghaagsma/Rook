@@ -20,8 +20,8 @@ namespace Rook
 
             new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = ApplicationGlobals.MAP_WIDTH,
-                PreferredBackBufferHeight = ApplicationGlobals.MAP_HEIGHT,
+                PreferredBackBufferWidth = ApplicationGlobals.MapWidth,
+                PreferredBackBufferHeight = ApplicationGlobals.MapHeight,
                 IsFullScreen = false
             };
         }

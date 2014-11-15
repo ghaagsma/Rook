@@ -16,21 +16,21 @@ namespace Rook
 
         public Map()
         {
-            GMap = new MapTile[ApplicationGlobals.MAP_HEIGHT / ApplicationGlobals.TILE_SIZE, 
-                ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE];
+            GMap = new MapTile[ApplicationGlobals.MapHeight / ApplicationGlobals.TileSize, 
+                ApplicationGlobals.MapWidth / ApplicationGlobals.TileSize];
             MapObjects = new List<PhysicalObject>();
 
-            for (var i = 0; i < ApplicationGlobals.MAP_HEIGHT / ApplicationGlobals.TILE_SIZE; i++)
+            for (var i = 0; i < ApplicationGlobals.MapHeight / ApplicationGlobals.TileSize; i++)
             {
-                for (var j = 0; j < ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE; j++)
+                for (var j = 0; j < ApplicationGlobals.MapWidth / ApplicationGlobals.TileSize; j++)
                 {
                     GMap[i, j] = new MapTile
                     {
                         CollisionType = CollisionType.None,
-                        MapDest = {X = j*ApplicationGlobals.TILE_SIZE, Y = i*ApplicationGlobals.TILE_SIZE}
+                        MapDest = {X = j*ApplicationGlobals.TileSize, Y = i*ApplicationGlobals.TileSize}
                     };
 
-                    GMap[i, j].MapDest.Height = GMap[i, j].MapDest.Width = ApplicationGlobals.TILE_SIZE;
+                    GMap[i, j].MapDest.Height = GMap[i, j].MapDest.Width = ApplicationGlobals.TileSize;
                 }
             }
         }
@@ -39,9 +39,9 @@ namespace Rook
         {
             //var rand = new Random();
 
-            for (var i = 0; i < ApplicationGlobals.MAP_HEIGHT / ApplicationGlobals.TILE_SIZE; i++)
+            for (var i = 0; i < ApplicationGlobals.MapHeight / ApplicationGlobals.TileSize; i++)
             {
-                for (var j = 0; j < ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE; j++)
+                for (var j = 0; j < ApplicationGlobals.MapWidth / ApplicationGlobals.TileSize; j++)
                 {
                     spriteBatch.Draw(_mapTexture0, GMap[i, j].MapDest, GMap[i, j].MapSrc, Color.White);
                 }
@@ -60,9 +60,9 @@ namespace Rook
             {
                 var mapElt = mapLine.Split(' ');
 
-                for (var w = 0; w < ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE; w++)
+                for (var w = 0; w < ApplicationGlobals.MapWidth / ApplicationGlobals.TileSize; w++)
                 {
-                    GMap[h, w].MapSrc.Width = GMap[h, w].MapSrc.Height = ApplicationGlobals.TILE_SIZE;
+                    GMap[h, w].MapSrc.Width = GMap[h, w].MapSrc.Height = ApplicationGlobals.TileSize;
                     GMap[h, w].DisplayChar = char.Parse(mapElt[w]);
                 }
 
@@ -75,131 +75,131 @@ namespace Rook
         void SetSource()
         {
             var rand = new Random();
-            for (var h = 0; h < ApplicationGlobals.MAP_HEIGHT / ApplicationGlobals.TILE_SIZE; ++h)
-                for (var w = 0; w < ApplicationGlobals.MAP_WIDTH / ApplicationGlobals.TILE_SIZE; ++w)
+            for (var h = 0; h < ApplicationGlobals.MapHeight / ApplicationGlobals.TileSize; ++h)
+                for (var w = 0; w < ApplicationGlobals.MapWidth / ApplicationGlobals.TileSize; ++w)
                 {
                     int t;
 
                     switch (GMap[h, w].DisplayChar)
                     {
                         case 'a':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'b':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'c':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'd':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 1 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 1*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'e':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 1 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 1*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'f':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 1 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 1*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'g':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 2 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 2*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'h':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 2 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 2*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'i':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 2 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 2*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'j':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 3 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 3*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'k':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 3 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 3*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'l':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 3 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 3*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'm':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 4 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 4*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'n':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 4 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 4*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'o':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 4 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 4*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'p':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 5 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 5*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'q':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 5 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 5*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'r':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 5 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 5*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 's':
-                            GMap[h, w].MapSrc.X = 0 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 6 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 0*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 6*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 't':
-                            GMap[h, w].MapSrc.X = 1 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 6 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 1*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 6*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'u':
-                            GMap[h, w].MapSrc.X = 2 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 6 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 2*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 6*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'A':
-                            GMap[h, w].MapSrc.X = 5 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 5*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'B':
-                            GMap[h, w].MapSrc.X = 4 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 4*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         case 'C':
-                            GMap[h, w].MapSrc.X = 3 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 3*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Full;
                             break;
                         // Spike
@@ -211,8 +211,8 @@ namespace Rook
                                 t = 2;
                             else
                                 t = 0;
-                            GMap[h, w].MapSrc.X = t * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 9 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = t*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 9*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Damage;
                             break;
                         // Acid
@@ -224,8 +224,8 @@ namespace Rook
                                 t = 2;
                             else
                                 t = 0;
-                            GMap[h, w].MapSrc.X = t * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 8 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = t*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 8*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.Damage;
                             break;
                         // Sky / Background
@@ -237,13 +237,13 @@ namespace Rook
                                 t = 2;
                             else
                                 t = 0;
-                            GMap[h, w].MapSrc.X = t * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 7 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = t*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 7*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.None;
                             break;
                         default:
-                            GMap[h, w].MapSrc.X = 3 * ApplicationGlobals.TILE_SIZE;
-                            GMap[h, w].MapSrc.Y = 0 * ApplicationGlobals.TILE_SIZE;
+                            GMap[h, w].MapSrc.X = 3*ApplicationGlobals.TileSize;
+                            GMap[h, w].MapSrc.Y = 0*ApplicationGlobals.TileSize;
                             GMap[h, w].CollisionType = CollisionType.None;
                             break;
                     }

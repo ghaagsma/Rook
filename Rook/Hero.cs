@@ -7,8 +7,8 @@ namespace Rook
 {
     public class Hero : Character
     {
-        public Hero(int startX = ApplicationGlobals.TILE_SIZE, 
-                    int startY = 43*ApplicationGlobals.TILE_SIZE)
+        public Hero(int startX = ApplicationGlobals.TileSize, 
+                    int startY = 43*ApplicationGlobals.TileSize)
         {
             OldState = Keyboard.GetState();
 
@@ -18,7 +18,7 @@ namespace Rook
             ShowStats = true;
 
             SpritePosition = new Rectangle(startX, startY, 
-                ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
+                ApplicationGlobals.TileSize, ApplicationGlobals.TileSize);
             Animation = new Animation(0);
         }
 
@@ -66,13 +66,13 @@ namespace Rook
 
             if (SpriteSpeed.X > MaxRunSpeed)
                 SpriteSpeed.X = MaxRunSpeed;
-            else if (SpriteSpeed.X < -1.0f * MaxRunSpeed)
-                SpriteSpeed.X = -1.0f * MaxRunSpeed;
+            else if (SpriteSpeed.X < -1.0f*MaxRunSpeed)
+                SpriteSpeed.X = -1.0f*MaxRunSpeed;
 
             if (SpriteSpeed.Y > TerminalVelocity)
                 SpriteSpeed.Y = TerminalVelocity;
-            else if (SpriteSpeed.Y < -1.0f * MaxJumpSpeed)
-                SpriteSpeed.Y = -1.0f * MaxJumpSpeed;
+            else if (SpriteSpeed.Y < -1.0f*MaxJumpSpeed)
+                SpriteSpeed.Y = -1.0f*MaxJumpSpeed;
 
             Move(map, gameTime);
             Animation.UpdateAnimationImage(SpriteSpeed, IsAirborne);
@@ -113,13 +113,13 @@ namespace Rook
 
             // Draw Health/Mana/Exp. Outline
             Rectangle source, destination;
-            source.Height = destination.Height = 2*ApplicationGlobals.TILE_SIZE;
-            source.Width = destination.Width = 4*ApplicationGlobals.TILE_SIZE;
+            source.Height = destination.Height = 2*ApplicationGlobals.TileSize;
+            source.Width = destination.Width = 4*ApplicationGlobals.TileSize;
             source.X = 0;
-            source.Y = 3*ApplicationGlobals.TILE_SIZE;
+            source.Y = 3*ApplicationGlobals.TileSize;
 
-            destination.X = SpritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2;
-            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE;
+            destination.X = SpritePosition.X - 2*ApplicationGlobals.TileSize + ApplicationGlobals.TileSize/2;
+            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TileSize;
 
             spriteBatch.Draw(PTexture, destination, source, Color.White);
 
@@ -127,17 +127,17 @@ namespace Rook
             source.Height = 1;
             source.Width = 14;
             source.X = 0;
-            source.Y = 5 * ApplicationGlobals.TILE_SIZE;
+            source.Y = 5*ApplicationGlobals.TileSize;
 
             destination.Height = 1;
             destination.Width = 14;
-            destination.X = SpritePosition.X - 2*ApplicationGlobals.TILE_SIZE + ApplicationGlobals.TILE_SIZE/2 + 2;
+            destination.X = SpritePosition.X - 2*ApplicationGlobals.TileSize + ApplicationGlobals.TileSize/2 + 2;
 
-            var numRows = (Health * 28) / MaxHealth;
+            var numRows = (Health*28) / MaxHealth;
 
             for (var curRow = numRows; curRow > 0; curRow--)
             {
-                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
+                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TileSize - curRow + 30;
                 spriteBatch.Draw(PTexture, destination, source, Color.White);
             }
             
@@ -149,7 +149,7 @@ namespace Rook
 
             for (var curRow = numRows; curRow > 0; curRow--)
             {
-                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE - curRow + 30;
+                destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TileSize - curRow + 30;
                 spriteBatch.Draw(PTexture, destination, source, Color.White);
             }
 
@@ -157,9 +157,9 @@ namespace Rook
             source.Y++;
             source.Width = destination.Width = 1;
             source.Height = destination.Height = 4;
-            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TILE_SIZE + 14;
+            destination.Y = SpritePosition.Y - 3*ApplicationGlobals.TileSize + 14;
 
-            var numCols = (Experience * 28) / NextLevel;
+            var numCols = (Experience*28) / NextLevel;
 
             for (var curCol = 0; curCol < numCols; curCol++)
             {

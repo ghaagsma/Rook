@@ -11,7 +11,7 @@ namespace Rook
             //Animation = new Animation();
             Exists = true;
 
-            SpritePosition = new Rectangle(16, 20, ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
+            SpritePosition = new Rectangle(16, 20, ApplicationGlobals.TileSize, ApplicationGlobals.TileSize);
             SpriteSpeed = new Vector2(0.0f, 0.0f);
             SpriteAcceleration = new Vector2(0.0f, 0.0f);
         } // ctor

@@ -24,13 +24,13 @@ namespace Rook
             {
                 SpritePosition.X += (int)(SpriteSpeed.X / Math.Abs(SpriteSpeed.X));
 
-                xTile1 = (SpritePosition.X + 3) / ApplicationGlobals.TILE_SIZE;
-                xTile2 = (SpritePosition.X + ApplicationGlobals.TILE_SIZE - 4) / ApplicationGlobals.TILE_SIZE;
-                yTile1 = SpritePosition.Y / ApplicationGlobals.TILE_SIZE;
-                yTile2 = (SpritePosition.Y + ApplicationGlobals.TILE_SIZE - 1) / ApplicationGlobals.TILE_SIZE;
+                xTile1 = (SpritePosition.X + 3) / ApplicationGlobals.TileSize;
+                xTile2 = (SpritePosition.X + ApplicationGlobals.TileSize - 4) / ApplicationGlobals.TileSize;
+                yTile1 = SpritePosition.Y / ApplicationGlobals.TileSize;
+                yTile2 = (SpritePosition.Y + ApplicationGlobals.TileSize - 1) / ApplicationGlobals.TileSize;
 
                 if (SpritePosition.X < 0 || 
-                    SpritePosition.X > ApplicationGlobals.MAP_WIDTH - ApplicationGlobals.TILE_SIZE ||
+                    SpritePosition.X > ApplicationGlobals.MapWidth - ApplicationGlobals.TileSize ||
                     map[yTile1, xTile1].CollisionType == CollisionType.Full ||
                     map[yTile2, xTile1].CollisionType == CollisionType.Full ||
                     map[yTile1, xTile2].CollisionType == CollisionType.Full ||
@@ -46,13 +46,13 @@ namespace Rook
             {
                 SpritePosition.Y += (int)(SpriteSpeed.Y / Math.Abs(SpriteSpeed.Y));
 
-                xTile1 = (SpritePosition.X + 3) / ApplicationGlobals.TILE_SIZE;
-                xTile2 = (SpritePosition.X + ApplicationGlobals.TILE_SIZE - 4) / ApplicationGlobals.TILE_SIZE;
-                yTile1 = SpritePosition.Y / ApplicationGlobals.TILE_SIZE;
-                yTile2 = (SpritePosition.Y + ApplicationGlobals.TILE_SIZE - 1) / ApplicationGlobals.TILE_SIZE;
+                xTile1 = (SpritePosition.X + 3) / ApplicationGlobals.TileSize;
+                xTile2 = (SpritePosition.X + ApplicationGlobals.TileSize - 4) / ApplicationGlobals.TileSize;
+                yTile1 = SpritePosition.Y / ApplicationGlobals.TileSize;
+                yTile2 = (SpritePosition.Y + ApplicationGlobals.TileSize - 1) / ApplicationGlobals.TileSize;
 
                 if (SpritePosition.Y < 0 ||
-                    SpritePosition.Y > ApplicationGlobals.MAP_HEIGHT - ApplicationGlobals.TILE_SIZE ||
+                    SpritePosition.Y > ApplicationGlobals.MapHeight - ApplicationGlobals.TileSize ||
                     map[yTile1, xTile1].CollisionType == CollisionType.Full ||
                     map[yTile2, xTile1].CollisionType == CollisionType.Full ||
                     map[yTile1, xTile2].CollisionType == CollisionType.Full ||
@@ -72,10 +72,10 @@ namespace Rook
                 IsAirborne = true;
 
             // Check for map collision damage
-            xTile1 = (SpritePosition.X + 1) / ApplicationGlobals.TILE_SIZE;
-            xTile2 = (SpritePosition.X + ApplicationGlobals.TILE_SIZE - 2) / ApplicationGlobals.TILE_SIZE;
-            yTile1 = SpritePosition.Y / ApplicationGlobals.TILE_SIZE;
-            yTile2 = (SpritePosition.Y + ApplicationGlobals.TILE_SIZE - 1) / ApplicationGlobals.TILE_SIZE;
+            xTile1 = (SpritePosition.X + 1) / ApplicationGlobals.TileSize;
+            xTile2 = (SpritePosition.X + ApplicationGlobals.TileSize - 2) / ApplicationGlobals.TileSize;
+            yTile1 = SpritePosition.Y / ApplicationGlobals.TileSize;
+            yTile2 = (SpritePosition.Y + ApplicationGlobals.TileSize - 1) / ApplicationGlobals.TileSize;
 
             if (map[yTile1, xTile1].CollisionType == CollisionType.Damage ||
                 map[yTile2, xTile1].CollisionType == CollisionType.Damage ||

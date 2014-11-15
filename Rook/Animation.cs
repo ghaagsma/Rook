@@ -9,8 +9,8 @@ namespace Rook
             State = AnimationState.Default;
             CurrentImageFrame = 0;
             FramesPerImage = framesPerImage;
-            ImageSource = new Rectangle(0, spriteIndex*ApplicationGlobals.TILE_SIZE, 
-                ApplicationGlobals.TILE_SIZE, ApplicationGlobals.TILE_SIZE);
+            ImageSource = new Rectangle(0, spriteIndex*ApplicationGlobals.TileSize, 
+                ApplicationGlobals.TileSize, ApplicationGlobals.TileSize);
         }
 
         public void UpdateAnimationImage(Vector2 spriteSpeed, bool isAirborne)
@@ -75,7 +75,7 @@ namespace Rook
                 }
             }
 
-            ImageSource.X = (int)State * ImageSource.Width;
+            ImageSource.X = (int)State*ImageSource.Width;
             CurrentImageFrame++;
         }
 
